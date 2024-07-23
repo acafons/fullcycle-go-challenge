@@ -1,5 +1,23 @@
+FROM golang:1.21 as builder
+
+WORKDIR /src
+
+COPY <<EOF ./main.go
+
+package main
+
+import "fmt"
+
+func main() {
+    fmt.Println("Full Cycle Rocks!!")
+}
+
+EOF
+
+RUN go build -o /bin/fullcycle ./main.go
+
 FROM scratch
 
-COPY hello-fullcycle /
+COPY --from=builder /bin/fullcycle /bin/fullcycle
 
-CMD [ "/hello-fullcycle" ]
+CMD [ "/bin/fullcycle" ]
